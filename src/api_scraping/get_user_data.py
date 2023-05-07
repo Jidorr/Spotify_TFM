@@ -18,4 +18,5 @@ def getUserPlaylists():
 def getUserSongsInPlaylist(playlist_name):
     pass
 
-print(getUserPlaylists())
+def getSongInformation(song_id):
+    pass
