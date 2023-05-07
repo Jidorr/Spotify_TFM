@@ -8,7 +8,8 @@
 
 ## Data
  * **data/files/song_data.csv** 
-![image](data\img\data.PNG)
+
+<img src="data\img\data.PNG" width="400"/>
 
 
 
