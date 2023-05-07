@@ -13,8 +13,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
                     client_secret= cred.client_secret, 
                     redirect_uri=cred.redirect_url))
 
-with open('../../data/df1.csv', encoding='utf8') as csv_file:
-    conn = sqlite3.connect('../../data/song_database1.db')
+with open('../../data/files/df1.csv', encoding='utf8') as csv_file:
+    conn = sqlite3.connect('../../data/database/song_database1.db')
     cursor = conn.cursor()
     conn.execute('''DROP TABLE IF EXISTS songs''')
     conn.execute('''CREATE TABLE songs
