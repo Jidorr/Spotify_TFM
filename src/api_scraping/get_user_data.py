@@ -10,13 +10,23 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
                     redirect_uri=cred.redirect_url))
 
 def getUserRecentTracks():
-    return sp.current_user_recently_played(limit=10)
+    tracks = {}
+    for item in (sp.current_user_recently_played(limit=10)['items']):
+        tracks[item['track']['name']] = item['track']['id']
+    return tracks
 
 def getUserPlaylists():
-    return sp.current_user_playlists()
+    ids = {}
+    for item in (sp.current_user_playlists()['items']):
+        ids[item['name']] = item['id']
+    return ids
 
-def getUserSongsInPlaylist(playlist_name):
-    pass
+def getSongsInPlaylist(playlist_id):
+    tracks = {}
+    for item in (sp.playlist_tracks(playlist_id)['items']):
+        tracks[item['track']['name']] = item['track']['id']
+    return tracks
 
 def getSongInformation(song_id):
-    pass
+    song_features = sp.audio_features(song_id)
+    return song_features
