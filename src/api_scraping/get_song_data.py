@@ -18,27 +18,18 @@ with open('../../data/files/song_data.csv', encoding='utf8') as csv_file:
     cursor = conn.cursor()
     conn.execute('''DROP TABLE IF EXISTS songs''')
     conn.execute('''CREATE TABLE songs
-                (song_number INTEGER PRIMARY KEY AUTOINCREMENT,
-                 title TEXT NOT NULL,
-                 artist TEXT NOT NULL,
-                 spotifyID text NOT NULL,
-                 acousticness FLOAT,
-                 danceability FLOAT,
-                 duration_ms INTEGER,
-                 energy FLOAT,
-                 instrumentalness FLOAT,
-                 key INTEGER,
-                 liveness FLOAT,
-                 loudness FLOAT,
-                 mode INTEGER,
-                 speechiness FLOAT,
-                 tempo FLOAT,
-                 time_signature INTEGER,
-                 valence FLOAT);''')
-    query = '''INSERT INTO songs (title, artist, spotifyID, acousticness,
-                 danceability, duration_ms, energy, instrumentalness, key,
-                 liveness, loudness, mode, speechiness, tempo, time_signature, valence) 
-                 VALUES (?, ?, ?, ?, ?, ?,?, ?, ?,?, ?, ?,?, ?, ?, ?)'''
+                (id INTEGER PRIMARY KEY,name TEXT NOT NULL,album TEXT NOT NULL,album_id TEXT NOT NULL,
+                 artists TEXT NOT NULL,artists_ids TEXT NOT NULL,track_number INTEGER,disc_number INTEGER,
+                 explicit INTEGER,danceability FLOAT,energy FLOAT,key INTEGER,loudness FLOAT,mode INTEGER,
+                 speechiness FLOAT,acousticness FLOAT,instrumentalness FLOAT,liveness FLOAT,duration_ms INTEGER,
+                 valence FLOAT,tempo FLOAT,duration_ms INTEGER,time_signature INTEGER,year INTEGER,release_date DATE
+                 );''')
+    query = '''INSERT INTO songs (id, name, album, album_id, 
+    artists, artist_ids, track_number, disc_number, explicit, 
+    danceability, energy, key, loudness, mode, speechiness, acousticness, 
+    instrumentalness, liveness, valence, tempo, duration_ms, time_signature, 
+    year, release_date) 
+                 VALUES (?, ?, ?, ?, ?, ?,?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?,?, ?, ?)'''
     csv_reader = csv.reader(csv_file, delimiter=',')
     
     # skip the header row
@@ -57,12 +48,19 @@ with open('../../data/files/song_data.csv', encoding='utf8') as csv_file:
             result = sp.search(q=q, type='track')
             song_id = result['tracks']['items'][0]['id']
             song_features = sp.audio_features(song_id)[0]
-            cursor.execute(query, (f"{song_title}", f"{artist_name}", f"{song_id}", song_features['acousticness'],
-                    song_features['danceability'], song_features['duration_ms'], song_features['energy'], 
-                    song_features['instrumentalness'], song_features['key'],
-                    song_features['liveness'], song_features['loudness'], song_features['mode'], 
-                    song_features['speechiness'], song_features['tempo'], song_features['time_signature'], 
-                    song_features['valence']))
+            cursor.execute(query, (f"{song_id}", f"{song_title}", song_features['album'], 
+                                   song_features['album_id'], song_features['artists'], 
+                                   song_features['artist_ids'], song_features['track_number'], 
+                                   song_features['disc_number'], song_features['explicit'], 
+                                   song_features['danceability'], song_features['energy'], 
+                                   song_features['key'], song_features['loudness'], 
+                                   song_features['mode'], song_features['speechiness'], 
+                                   song_features['acousticness'], song_features['instrumentalness'], 
+                                   song_features['liveness'], song_features['valence'], 
+                                   song_features['tempo'], song_features['duration_ms'], 
+                                   song_features['time_signature'], song_features['year'], 
+                                   song_features['release_date']
+))
         except:
             continue
         if (count % 5 == 0):
