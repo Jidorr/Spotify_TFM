@@ -22,9 +22,27 @@
 ## Diagrama de flow
 <img src="data\img\flow_diagram.PNG"/>
 
-La primera fase és la d'extracció (scraping). Es parteix d'un arxiu csv amb dades (nom, artista, any) d'un milió de cançons. A partir d'aquesta informació, es realitzen crides a l'api d'Spotify per tal d'extreure els atributs de cadascuna de les cançons. Aquests atributs son els que s'utilitzaràn per realitzar el clústering. Un cop aconseguida aquesta informació, s'emmagatzemen les noves dades a una base de dades utilitzant SQLite.
+El procés consta de dues fases clau que treballen conjuntament per proporcionar recomanacions de música personalitzades i rellevants. A continuació, es descriurà cada fase en detall:
 
-La segona fase és la fase de recomenació. Es llegeix informació de l'usuari i es crea un model Kmeans. Amb aquest model, som capaços d'agrupar les cançons segons els seus atributs i podem fer recomenació de cançons aparentment similars. Per realitzar aquestes prediccions, tenim diferents opcions; recomenar segons les últimes cançons escoltades o bé recomenar partint d'una playlist pròpia d'Spotify. Cada cançó crea un conjunt de recomenacions segons la distància en la que es troben. Es pren la cançó més pròxima a cada una de les cançons que utilizem, per tant si partim d'una playlist amb 20 elements, tindrem 20 noves recomenacions.
+#### Fase 1: Extracció de dades
+
+La primera fase del procés és l'extracció de dades, també coneguda com a scraping. Inicialment, es disposa d'un arxiu CSV que conté informació sobre un milió de cançons, incloent-hi el nom de la cançó, l'artista i l'any de publicació.
+
+Utilitzant aquest arxiu com a punt de partida, es realitzen crides a l'API d'Spotify per obtenir informació detallada sobre cada cançó. A través d'aquestes crides, s'extreuen els atributs musicals i característiques específiques de cada cançó, com ara el tempo, la tonalitat, l'energia, l'acústica, el ritme i molts altres. Aquests atributs són essencials per realitzar el següent pas del procés, que és el clústering.
+
+Una vegada que s'ha obtingut amb èxit tota aquesta informació per a cada cançó, les dades s'emmagatzemen en una base de dades utilitzant el sistema de gestió de bases de dades SQLite. Aquesta base de dades ens permetrà accedir i utilitzar posteriorment les dades per generar recomanacions de música personalitzades.
+
+#### Fase 2: Recomanació de cançons
+
+La segona fase és la fase de recomanació, on s'utilitza la informació de l'usuari per generar recomanacions de música. En aquesta fase, es recull informació rellevant de l'usuari, com ara les seves preferències musicals, les últimes cançons escoltades o una playlist personalitzada de Spotify.
+
+Amb aquesta informació de l'usuari, es crea un model K-means, un algorisme de clústering que agrupa les cançons segons els seus atributs musicals. Aquest model de clústering ens permet agrupar les cançons en categories similars basades en els atributs musicals compartits.
+
+A partir d'aquest model K-means, podem realitzar recomanacions de cançons que semblen similars a les preferències de l'usuari. Tenim diverses opcions per realitzar aquestes prediccions: podem recomanar cançons basades en les últimes cançons escoltades per l'usuari, o bé utilitzar una playlist pròpia de Spotify com a punt de partida per a les recomanacions.
+
+Per cada cançó, s'obté un conjunt de recomanacions basades en la seva proximitat a altres cançons dins del mateix clúster. Per exemple, si partim d'una playlist amb 20 elements, s'utilitzen aquests elements com a punts de partida per buscar les cançons més properes en termes de similitud musical. Això ens proporciona 20 noves recomanacions de cançons que tenen característiques similars i s'ajusten als gustos musicals de l'usuari.
+
+En resum, aquest procés consta de dues fases essencials: l'extracció de dades, on s'obté informació detallada de les cançons a través de l'API d'Spotify i s'emmagatzema en una base de dades, i la fase de recomanació, on s'utilitza la informació de l'usuari i un model de clústering per generar recomanacions de música personalitzades. Aquest sistema permet descobrir noves cançons que s'ajustin als gustos musicals de l'usuari basant-se en les similituds musicals entre les cançons.
 
 
 
