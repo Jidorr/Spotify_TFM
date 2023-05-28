@@ -15,6 +15,7 @@
 ## Data
  * **data/files/song_data.csv**: arxiu original de 1M Song Dataset
  <img src="data\img\data.PNG" width="400"/>
+ 
  * **data/model/**: conté el model generat
  * **data/img/** : imatges
 
