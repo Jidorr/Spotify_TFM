@@ -5,10 +5,10 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
-pd.set_option('display.max_columns', 500)
 from sklearn.cluster import KMeans
 from scipy.spatial.distance import cdist
 from sklearn.preprocessing import StandardScaler
+import pickle
 
 module_path = os.path.abspath(os.path.join('..'))
 if module_path not in sys.path:
@@ -22,23 +22,27 @@ conn = sqlite3.connect("../../data/database/song_database.db")
 dataset = pd.read_sql_query("SELECT * FROM songs2", conn)
 
 # Select the features for clustering
-features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
+all_features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
             'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo',
             'duration_ms', 'time_signature']
 
-features = ['energy', 'mode', 'acousticness']
+features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
+            'acousticness', 'instrumentalness', 'valence', 'tempo',
+            'time_signature']
 
 scaler = StandardScaler()
 dataset[features] = scaler.fit_transform(dataset[features])
 
-
 # Fit the k-means model
 k = 5  # Specify the number of clusters
-kmeans = KMeans(n_clusters=k, random_state=42)
+kmeans = KMeans(n_clusters=k, random_state=42, n_init='auto')
 kmeans.fit(dataset[features])
 
+with open("../../data/model/model.pkl", "wb") as f:
+    pickle.dump(kmeans, f)
+
 # Choose a song to find similar songs
-chosen_song = dataset[dataset['id'] == '4y6UbERZs3PZ0qsPYqe0Cq']  # Replace with your chosen song
+chosen_song = dataset[dataset['id'] == '0htMxjQHDMnrt8as3Z3uFo']  # Replace with your chosen song
 
 # Get the cluster label for the chosen song
 chosen_song_cluster = kmeans.predict(chosen_song[features])[0]
